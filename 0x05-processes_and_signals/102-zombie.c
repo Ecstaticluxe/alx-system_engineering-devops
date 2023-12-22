@@ -4,6 +4,10 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+/**
+ * infinite_while - Run an infinite while loop.
+ * Return: Always 0.
+ */
 int infinite_while(void)
 {
 	while (1)
@@ -14,33 +18,28 @@ int infinite_while(void)
 }
 
 /**
- * main - Entry point of the program
- *
+ * main - Creates five zombie processes.
  * Return: Always 0.
  */
 int main(void)
 {
-    pid_t zombie_pid;
-    int i;
+	pid_t pid;
 
-    for (i = 0; i < 5; i++)
-    {
-        zombie_pid = fork();
+	char count = 0;
 
-        if (zombie_pid == -1)
-        {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        }
+	while (count < 5)
+	{
+		pid = fork();
+		if (pid > 0)
+		{
+			printf("Zombie process created, PID: %d\n", pid);
+			sleep(1);
+			count++;
+		}
+		else
+			exit(0);
+	}
 
-        if (zombie_pid == 0) // Child process
-        {
-            printf("Zombie process created, PID: %d\n", getpid());
-            exit(EXIT_SUCCESS);
-        }
-    }
-
-    infinite_while(); // Parent process enters infinite loop
-
-    return (0);
+	infinite_while();
+	return (EXIT_SUCCESS);
 }
