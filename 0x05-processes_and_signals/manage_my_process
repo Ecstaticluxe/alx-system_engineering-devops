@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#Stops manage_my_process
+#Deletes the file /var/run/my_process.pid
+#Starts manage_my_process
+#Creates a file containing its PID in /var/run/my_process.pid
+#Displays manage_my_process restarted
+
+pidfile="/var/run/my_process.pid"
+logfile="/tmp/my_process"
+
+start_process() {
+    if [ -f "$pidfile" ]; then
+        echo "Error: manage_my_process is already running (PID $(cat $pidfile))"
+        exit 1
+    fi
+
+    ./manage_my_process.sh &
+    echo $! > "$pidfile"
+    echo "manage_my_process started"
+}
+
+stop_process() {
+    if [ ! -f "$pidfile" ]; then
+        echo "Error: manage_my_process is not running"
+        exit 1
+    fi
+
+    pid=$(cat "$pidfile")
+    kill $pid
+    rm -f "$pidfile"
+    echo "manage_my_process stopped"
+}
+
+restart_process() {
+    stop_process
+    start_process
+    echo "manage_my_process restarted"
+}
+
+case "$1" in
+    start)
+        start_process
+        ;;
+    stop)
+        stop_process
+        ;;
+    restart)
+        restart_process
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+        ;;
+esac
