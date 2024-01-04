@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#This script listens on port 98 on localhost.
+PORT=98
+
+echo "Starting my script..."
+nc -l -p $PORT | while read line
+do
+    echo "Received: $line"
+done
+
