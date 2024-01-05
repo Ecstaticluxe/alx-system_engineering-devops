@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
 # Display listening ports with PID and program name
-netstat -tulpn | awk '/^tcp/ || /^udp/ {printf "%-6s %-15s %-6s %-30s\n", $1, $4, $7, $NF}' | sed 's/.*://' | sort -n
+
+echo "Active Internet connections (only servers)"
+echo "Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name"
+
+netstat -tln | awk '/^tcp/ {printf "tcp\t%d\t%d\t%s\t%s\t%s\t", $2, $3, $4, $5, $6; system("lsof -i :" $4 " -sTCP:LISTEN -t -n -P")}'
+
+netstat -uln | awk '/^udp/ {printf "udp\t%d\t%d\t%s\t%s\t\t", $2, $3, $4, $5; system("lsof -i :" $4 " -sUDP:LISTEN -t -n -P")}'
+
+# Display active UNIX domain sockets (only servers)
+echo "Active UNIX domain sockets (only servers)"
+echo "Proto RefCnt Flags       Type       State         I-Node   PID/Program name    Path"
+netstat -lx | awk '/^unix/ {printf "%s\t%s\t%s\t%s\t%s\t%s\t", $1, $2, $3, $4, $6, $7; system("lsof -U -a -c -U -c " $7 " -t -n -P")}'
 
