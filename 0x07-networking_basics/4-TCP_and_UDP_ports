@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-# Display listening ports with PID
-# Use netstat to display listening sockets and their associated PID and program name
-netstat -lp
+# Display listening ports with PID and program name
+netstat -tulpn | awk '/^tcp/ || /^udp/ {printf "%-6s %-15s %-6s %-30s\n", $1, $4, $7, $NF}' | sed 's/.*://' | sort -n
+
