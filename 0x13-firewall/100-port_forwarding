@@ -1,14 +1,21 @@
-sudo nano /etc/ufw/before.rules
-
 # Port Forwarding
+#
+#   ufw-before-input
+#   ufw-before-output
+#   ufw-before-forward
+
+
+
 *nat
 :PREROUTING ACCEPT [0:0]
 -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
 COMMIT
 
+
+
 sudo ufw disable
 sudo ufw enable
 
-
+COMMIT
 
 
