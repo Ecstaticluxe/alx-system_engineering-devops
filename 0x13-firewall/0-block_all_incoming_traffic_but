@@ -10,3 +10,4 @@ sudo ufw logging on
 sudo ufw default deny incoming
 sudo ufw status numbered
 
+sudo ufw enable
