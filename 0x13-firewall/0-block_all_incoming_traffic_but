@@ -1,0 +1,12 @@
+#check the status of the ufw to make sure it is sactiv.
+#allow incoming traffic of the TCP port
+#verify the rules have been added
+
+sudo ufw allow 22/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow 80/tcp
+sudo ufw logging on
+
+sudo ufw default deny incoming
+sudo ufw status numbered
+
